@@ -211,7 +211,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.includes("https") ?
+            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="16rem" height="200px" url={e.message} /> : e.message.includes("https") ?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
