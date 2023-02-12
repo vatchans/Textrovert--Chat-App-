@@ -33,7 +33,7 @@ export default function Signup() {
       
 
         try{
-        let res=await axios.post("http://localhost:8000/users/Signup",
+        let res=await axios.post("https://textrovert.onrender.com/users/Signup",
         {
             Email,
             Password,
