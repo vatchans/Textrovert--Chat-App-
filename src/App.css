@@ -185,6 +185,8 @@
   display: flex;
   flex-direction: column;
   flex: 0.65;
+  position: absolute;
+  ;
 }
 
 .chat-section-header {
@@ -246,6 +248,7 @@
 .chat-head {
   padding: 20px;
   display: flex;
+  /* position: fixed; */
   align-items: center;
   border-bottom: 1px solid lightgray;
 }
@@ -394,6 +397,16 @@ position: relative;
   position: absolute!important;
   top:-100px;
 }
+.w{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap:10px;
+  color:white;
+  border-radius: 0px 13px 13px 0px;
+  background-image: linear-gradient(to top, #0c3483 0%, #a2b6df 100%, #6b8cce 100%, #a2b6df 100%);
+}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
@@ -433,9 +446,9 @@ position: relative;
   .containes {
     display: flex;
     background-color: #ededed;
-    margin-top:-50px;
-    height:75vh;
-    width: 95vw;
+    /* margin-top:-50px; */
+    height:98vh;
+    width:95vw;
     border-radius: 13px;
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   }
