@@ -9,7 +9,7 @@ function Profilepic() {
     const [img,setimage]=useState("")
     let navigate=useNavigate()
     let user=JSON.parse(localStorage.getItem('Online-user'))
-    let url=`http://localhost:8000/users/Profile/${user._id}`
+    let url=`https://textrovert.onrender.com/users/Profile/${user._id}`
     let profile='profile.png'
     function convertToBase64(file){
         return new Promise((resolve, reject) => {
