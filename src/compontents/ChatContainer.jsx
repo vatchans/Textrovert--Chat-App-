@@ -26,7 +26,7 @@ export default function ChatContainer({ currentChat, socket }) {
   let [isRecording,setRecording]=useState(false)
   let [Recordings,setRecordings]=useState([])
   let [arrivalMessage, setArrivalMessage] = useState(null);
-  let [ismic,setmic]=useState(true)
+  let [issearchbar,setsearchbar]=useState(false)
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
   let [Show, hide] = useState("chat-box")
@@ -45,11 +45,13 @@ export default function ChatContainer({ currentChat, socket }) {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 350,
+    width:"18rem",
+    height:"20rem",
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    // border: '2px solid #000',
+    borderRadius:"6px",
     boxShadow: 24,
-    p: 4,
+    p: 1,
   };
   let queries = {
     xs: '(max-width: 320px)',
@@ -76,7 +78,7 @@ export default function ChatContainer({ currentChat, socket }) {
     setmessages(res.data);
   }
   useEffect(() => {
-    Collectmsgs()
+    Collectmsgs() 
   }, [currentChat]);
   let handleEmoji = (e, emojiObject) => {
     e.preventDefault()
@@ -153,14 +155,19 @@ export default function ChatContainer({ currentChat, socket }) {
   const addAudioElement = async(blob) => {
     const url =await convertToBase64(blob)
     handlesendmsg(url)
-    console.log(url)
   };
 
   useEffect(resizeTextArea, [msg]);
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    handlesendmsg(base64)
+    console.log(base64)
+  }
   return <>
     <div className={g || Show}>
       <div className='chat-head'>
-        <ArrowBackIcon
+        <ArrowBackIcon style={{color:"#EFF1EC"}}
           onClick={() => {
             if (media_screen_width.matches) {
               handlechange()
@@ -177,31 +184,33 @@ export default function ChatContainer({ currentChat, socket }) {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <img src={currentChat.Profile_pic} width="300" height="300" alt='view dp'></img>
+            <div style={{ display: "flex", justifyContent: "center"}}>
+              <img src={currentChat.Profile_pic}  style={{borderRadius:"8px" ,width:"17rem",height:"19rem"}}alt='view dp'></img>
             </div>
           </Box>
         </Modal>
         <div className='chat-head-info' >
           <h3>{currentChat.Username}</h3>
         </div>
-        <div className='Chat-head-right'>
+        {<div className='Chat-head-right'>
           <Tooltip title="Search messages">
-            <IconButton>
+            <IconButton style={{color:"#EFF1EC"}}>
               <SearchOutlined />
             </IconButton>
           </Tooltip>
           <Tooltip title="Attach File">
-            <IconButton>
-              <AttachFile />
-            </IconButton>
+          <label htmlFor="file-upload" >
+          <AttachFile />
+            {/*  */}
+            </label>
           </Tooltip>
+          <input type='file'accept='.jpeg,.png,.jpg,.mp3,.mp4' id='file-upload' onChange={(e) => handleFileUpload(e)} />
           <Tooltip title="menu">
-            <IconButton>
+            <IconButton style={{color:"#EFF1EC"}}>
               <MoreVert />
             </IconButton>
           </Tooltip>
-        </div>
+        </div>}
       </div>
   
 
@@ -211,11 +220,11 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="16rem" height="200px" url={e.message} /> : e.message.includes("https") ?
+            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.includes("https") ?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
-            </audio></span>:
+            </audio></span>:e.message.includes("data:image")?<img src={e.message}></img>:
               <span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
