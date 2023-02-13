@@ -1,15 +1,16 @@
-import React, { useEffect, useState,useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import '../App.css'
 import Contacts from './Contacts'
 import ChatContainer from './ChatContainer'
+import Welcome from './Welcome'
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { io } from "socket.io-client";
-import {RevolvingDot} from 'react-loader-spinner'
+import { RevolvingDot } from 'react-loader-spinner'
 export default function Chat() {
   let [Contact, SetContacts] = useState([])
   const socket = useRef();
-  let [loading,isloading]=useState(false)
+  let [loading, isloading] = useState(false)
   let [currentuser, setcurrentuser] = useState(undefined)
   const [currentChat, setCurrentChat] = useState(undefined);
   let navigate = useNavigate()
@@ -33,14 +34,14 @@ export default function Chat() {
       socket.current = io('https://textrovert.onrender.com');
       socket.current.emit("add-user", currentuser._id);
     }
-  }, [currentuser]); 
-  
-  useEffect(()=>{
-  isloading(true)
-  setTimeout(()=>{
-    isloading(false)
-  },400)
-  },[])
+  }, [currentuser]);
+
+  useEffect(() => {
+    isloading(true)
+    setTimeout(() => {
+      isloading(false)
+    }, 400)
+  }, [])
   let getdata = async () => {
     if (currentuser) {
       if (currentuser.isProfile_pic) {
@@ -59,29 +60,52 @@ export default function Chat() {
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
+  
+  let queries = {
+    xs: '(max-width: 320px)',
+    sm: '(max-width: 720px)',
+    md: '(max-width: 1024px)'
+  }
 
+  let media_screen_width = window.matchMedia(queries.sm);
+
+  let resize = async () => {
+    if (media_screen_width.matches) {
+      let a = await localStorage.getItem('res2')
+      let b = await localStorage.getItem("res")
+      if (a == "Display" && b == "Vanish") {
+        await localStorage.setItem('res2', "chat-box")
+        await localStorage.setItem("res", 'chat-section')
+        console.log("changed")
+      }
+    }
+  }
+  useEffect(() => {
+    resize()
+  }, [])
+  let name = JSON.parse(localStorage.getItem("Online-user"))
   return <>
-  {
-     loading?
-     <div className='Loader'>
-     <RevolvingDot
-     height="100%"
-     width="100%"
-     radius="50"
-     color="blue"
-     secondaryColor=''
-     ariaLabel="revolving-dot-loading"
-     wrapperClass="Loader"
-     visible={loading} />
-     </div>:
-    <div className='main'>
-      <div className="containes">
-        <Contacts Contacts={Contact} changeChat={handleChatChange} />
-        {currentChat === undefined ? (<div className='w'>Welcome</div>) :
-          <ChatContainer currentChat={currentChat} socket={socket}/>}
-      </div>
-    </div>
-}
+    {
+      loading ?
+        <div className='Loader'>
+          <RevolvingDot
+            height="100%"
+            width="100%"
+            radius="50"
+            color="blue"
+            secondaryColor=''
+            ariaLabel="revolving-dot-loading"
+            wrapperClass="Loader"
+            visible={loading} />
+        </div> :
+        <div className='main'>
+          <div className="containes">
+            <Contacts Contacts={Contact} changeChat={handleChatChange} />
+            {currentChat === undefined ? <Welcome name={name} /> :
+              <ChatContainer currentChat={currentChat} socket={socket} />}
+          </div>
+        </div>
+    }
   </>
 }
 
