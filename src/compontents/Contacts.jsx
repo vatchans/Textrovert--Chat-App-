@@ -36,11 +36,14 @@ let get=localStorage.getItem("res")
         <div className={get||Curr}>
           <div className='chat-section-header'>
              <Avatar src={CurrentuserImage}/>
+             <div className='logo'>
+            <img src="chatlog02.png"  alt="logo"/>
+            </div>
           </div>
           <div className='chat-search '>
             <div className='chat-search-box'>
             <SearchOutlined/>
-            <input placeholder='Search Chats' type='text'  onChange={(e)=>setsearch(e.target.value)}/>
+            <input type="text" placeholder="Search" onChange={(e)=>{setsearch(e.target.value)}}/>
             </div>
           </div>
        
@@ -55,7 +58,7 @@ let get=localStorage.getItem("res")
                  }
             }).map((e,i)=>{
               return(
-           <div className='Contact-list' key={i._id} >
+           <div className='Contact-list' key={e._id} >
             <Avatar src={e.Profile_pic}></Avatar>
             <div className='User-info' onClick={()=>{
               if(media_screen_width.matches){
