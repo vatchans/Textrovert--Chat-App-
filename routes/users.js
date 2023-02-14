@@ -10,6 +10,7 @@ const shortid=require('shortid')
 const nodemailer =require('nodemailer');
 const mongoose = require('mongoose');
 mongoose.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true })
+
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
@@ -151,9 +152,9 @@ router.post('/Profile/:id',async(req,res)=>{
 })
 router.post('/Send_msg',async(req,res)=>{
   try{
-     const {from,to,message}=req.body;
+     const {from,to,message,location}=req.body;
      const data=await Messagemodel.create({
-      message:{text:message},
+      message:{text:message,location:location},
       users:[from,to],
       sender:from,
       // time:Date.now()
@@ -181,6 +182,7 @@ router.post('/Get_msg',async(req,res)=>{
       return{
           fromSelf:e.sender.toString()===from,
           message:e.message.text,
+          location:e.message.location,
           time:e.createdAt
       }
     })
