@@ -410,9 +410,16 @@ input[type='file']{
 .emoji{
 position: relative;
 }
+.gif{
+  position: relative;
+}
+.GifPickerReact{
+  position: absolute!important;
+  top:-400px;
+}
 .emoji-picker-react{
   position: absolute!important;
-  top:200px;
+  top:-300px;
 }
 .w{
   display: flex;
@@ -507,9 +514,13 @@ position: relative;
     border-radius: 1rem 1rem 0 1rem;
     background: linear-gradient(98.63deg, #24e4f0 0%, #358ff9 100%);
   }
+  .GifPickerReact{
+    position: absolute!important;
+    top:-70%;
+  }
   .emoji-picker-react{
     position: absolute!important;
-    top:300px;
+    top:-70%;
   }
   .logo>img{
     width:14vw;
