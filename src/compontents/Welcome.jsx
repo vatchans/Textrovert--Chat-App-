@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 
-export default function Welcome({name}) {
+export default function Welcome() {
     let queries = {
         xs: '(max-width: 320px)',
         sm: '(max-width: 720px)',
@@ -19,9 +19,16 @@ let resize=async()=>{
              }
          }
 }
+let isExistinguser=async()=>{
+let Onlineuser=await JSON.parse(localStorage.getItem('Online-user'))
+setname(Onlineuser.Username)
+}
+useEffect(()=>{
+  isExistinguser()
+  
+})
 useEffect(()=>{
      resize()
-     setname(name.Username)
 },[])
    return <>
   <div className='container-fluid w' ><img src="cat-kitten.gif"></img><h2>Welcome, <span>{username}
