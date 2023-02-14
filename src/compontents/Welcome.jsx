@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 
 export default function Welcome({name}) {
     let queries = {
@@ -6,7 +6,7 @@ export default function Welcome({name}) {
         sm: '(max-width: 720px)',
         md: '(max-width: 1024px)'
       }
-    
+    let[username,setname]=useState("")
       let media_screen_width = window.matchMedia(queries.sm);
 let resize=async()=>{
     if(media_screen_width.matches){
@@ -21,10 +21,11 @@ let resize=async()=>{
 }
 useEffect(()=>{
      resize()
-     console.log("changed")
+     setname(name.Username)
 },[])
    return <>
-  <div className='container-fluid w' ><img src="cat-kitten.gif"></img><h2>Welcome, <span>!
+  <div className='container-fluid w' ><img src="cat-kitten.gif"></img><h2>Welcome, <span>{username}
+!
           </span></h2><h6>Tap to start your conversation</h6></div>
   </>
 }
