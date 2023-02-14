@@ -1,11 +1,11 @@
 import React from 'react'
 import '../App.css'
-import { SearchOutlined, MoreVert, AttachFile,} from '@mui/icons-material'
+import { SearchOutlined, MoreVert, AttachFile} from '@mui/icons-material'
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import GifBoxIcon from '@mui/icons-material/GifBox';
 import { Avatar, IconButton, Tooltip } from '@mui/material'
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import GifPicker from 'gif-picker-react';
 import Modal from '@mui/material/Modal';
 import notfication from './messenger_chat_sound.mp3'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -13,7 +13,6 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import SendIcon from '@mui/icons-material/Send';
 import Picker from 'emoji-picker-react';
 import styled from "styled-components";
-import ReactDOM from "react-dom";
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { v4 as uuidv4 } from "uuid";
 import { useState, useEffect, useRef } from 'react';
@@ -22,9 +21,7 @@ import ReactPlayer from 'react-player';
 import axios from 'axios';
 export default function ChatContainer({ currentChat, socket }) {
   let [Messages, setmessages] = useState([])
-  let [isLoading,setloading]=useState(false)
-  let [isRecording,setRecording]=useState(false)
-  let [Recordings,setRecordings]=useState([])
+  let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
   let [issearchbar,setsearchbar]=useState(false)
   let [msg, setmsg] = useState("")
@@ -37,8 +34,11 @@ export default function ChatContainer({ currentChat, socket }) {
   let [get, set] = useState(false)
 
   const textAreaRef = useRef(null);
-  const handemojipicker = () => {
+  const handlemojipicker = () => {
     hideemoji(!showemoji)
+  }
+  const handlegifpicker=()=>{
+    hidegifbox(!showgifbox)
   }
   const style = {
     position: 'absolute',
@@ -157,6 +157,10 @@ export default function ChatContainer({ currentChat, socket }) {
     handlesendmsg(url)
   };
 
+  const sendgif=async(gif)=>{
+   await handlesendmsg(gif.url)
+  }
+
   useEffect(resizeTextArea, [msg]);
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -220,11 +224,12 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.includes("https") ?
+            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
             </audio></span>:e.message.includes("data:image")?<img src={e.message}></img>:
+            e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<img src={e.message}></img>:
               <span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
@@ -236,10 +241,14 @@ export default function ChatContainer({ currentChat, socket }) {
         <div className='emoji'>
          {showemoji && <Picker onEmojiClick={(e, emojiObject) => handleEmoji(e, emojiObject)} />}
         </div>
+        <div className='gif'>
+          {showgifbox&& <GifPicker tenorApiKey={"AIzaSyCvDFneWgq-6Z3N1NwcCXflSGxu141dJKA"} onGifClick={(TenorImage)=>{sendgif(TenorImage)}} width="20rem" /> }
+        </div>
       </div>
 
       <div className='chat-footer'>
-        <EmojiEmotionsIcon onClick={handemojipicker} />&nbsp;
+      <GifBoxIcon onClick={handlegifpicker}/>
+        <EmojiEmotionsIcon onClick={handlemojipicker} />&nbsp;
         <TextArea ref={textAreaRef} placeholder="Message..." value={msg} type='text' onChange={(e) => { setmsg(e.target.value) }} row="1"  />&nbsp;
        {msg.length>0?<>
         <div className='sendbtn' type="submit" onClick={(e) => sendchat(e)}
