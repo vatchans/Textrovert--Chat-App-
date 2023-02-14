@@ -24,7 +24,7 @@ useEffect(()=>{
      console.log("changed")
 },[])
    return <>
-  <div className='container-fluid w' ><img src="cat-kitten.gif"></img><h2>Welcome, <span>{name.Username||""}!
+  <div className='container-fluid w' ><img src="cat-kitten.gif"></img><h2>Welcome, <span>{name.Username||"user"}!
           </span></h2><h6>Tap to start your conversation</h6></div>
   </>
 }
