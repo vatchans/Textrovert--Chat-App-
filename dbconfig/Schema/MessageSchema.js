@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const MessageSchema = mongoose.Schema(
   {
     message: {
-      text: {type:string||object,required: true },
+      text: {type:mongoose.Schema.Types.Mixed,required: true },
     },
     users: Array,
     sender: {
