@@ -13,26 +13,50 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import SendIcon from '@mui/icons-material/Send';
 import Picker from 'emoji-picker-react';
 import styled from "styled-components";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Map from './map';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { v4 as uuidv4 } from "uuid";
 import { useState, useEffect, useRef } from 'react';
 import { format } from 'timeago.js'
 import ReactPlayer from 'react-player';
+import { Link,useNavigate } from "react-router-dom";
 import axios from 'axios';
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function ChatContainer({ currentChat, socket }) {
   let [Messages, setmessages] = useState([])
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
-  let [issearchbar,setsearchbar]=useState(false)
+  const navigate=useNavigate()
+  const [mapZoom, setMapZoom] = useState(13);
+  const [map, setMap] = useState({});
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
   let [Show, hide] = useState("chat-box")
   let [showemoji, hideemoji] = useState(false)
+  const [opendialogbox, setdialogbox] = React.useState(false);
+
+  const handleClickdialogbox = () => {
+    setdialogbox(true);
+  };
+  
+  const handleClosedialogbox = () => {
+    setdialogbox(false);
+  };
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   let [get, set] = useState(false)
-
   const textAreaRef = useRef(null);
   const handlemojipicker = () => {
     hideemoji(!showemoji)
@@ -48,7 +72,6 @@ export default function ChatContainer({ currentChat, socket }) {
     width:"18rem",
     height:"20rem",
     bgcolor: 'background.paper',
-    // border: '2px solid #000',
     borderRadius:"6px",
     boxShadow: 24,
     p: 1,
@@ -75,11 +98,13 @@ export default function ChatContainer({ currentChat, socket }) {
       from: data._id,
       to: currentChat._id,
     });
-    setmessages(res.data);
+    setmessages(res.data.message); 
   }
   useEffect(() => {
-    Collectmsgs() 
+  Collectmsgs()
+
   }, [currentChat]);
+
   let handleEmoji = (e, emojiObject) => {
     e.preventDefault()
     let message = msg;
@@ -168,6 +193,30 @@ export default function ChatContainer({ currentChat, socket }) {
     handlesendmsg(base64)
     console.log(base64)
   }
+
+
+  const findlocation=async()=>{
+  
+  try {
+    navigator.geolocation.getCurrentPosition(async(e)=>{
+      let geolocation_data={latitude:e.coords.latitude,longitude:e.coords.longitude
+      }
+      const data = await JSON.parse(
+        localStorage.getItem('Online-user')
+      );
+      let res = await axios.post(`https://textrovert.onrender.com/users/Send_msg`, {
+        from: data._id,
+        to: currentChat._id,
+        location:geolocation_data
+      })
+      await localStorage.setItem("location",JSON.stringify(geolocation_data))
+      window.location.reload(false)
+    })
+  }
+  catch(error){
+        console.log(error)
+  }
+}
   return <>
     <div className={g || Show}>
       <div className='chat-head'>
@@ -224,7 +273,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
+            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
@@ -233,11 +282,33 @@ export default function ChatContainer({ currentChat, socket }) {
               <span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
-
+            
 
           )
         })
-        }
+        }    <div>
+      
+        <Dialog
+          open={opendialogbox}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClosedialogbox}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{" Are you sure ?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+             you want to share your current location with {currentChat.Username}.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosedialogbox}>Disagree</Button>
+            <Button onClick={findlocation}>Agree</Button>
+          </DialogActions>
+        </Dialog>
+        </div>
+  
+           {/* <div ref={mapElement} className="mapDiv" /> */}
         <div className='emoji'>
          {showemoji && <Picker onEmojiClick={(e, emojiObject) => handleEmoji(e, emojiObject)} />}
         </div>
@@ -247,6 +318,7 @@ export default function ChatContainer({ currentChat, socket }) {
       </div>
 
       <div className='chat-footer'>
+        <LocationOnIcon onClick={handleClickdialogbox}/>
       <GifBoxIcon onClick={handlegifpicker}/>
         <EmojiEmotionsIcon onClick={handlemojipicker} />&nbsp;
         <TextArea ref={textAreaRef} placeholder="Message..." value={msg} type='text' onChange={(e) => { setmsg(e.target.value) }} row="1"  />&nbsp;
@@ -269,3 +341,4 @@ export default function ChatContainer({ currentChat, socket }) {
 const TextArea = styled.textarea`
 
 `;
+
