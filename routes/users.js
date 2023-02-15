@@ -186,7 +186,7 @@ router.post('/Get_msg',async(req,res)=>{
           time:e.createdAt
       }
     })
-    res.status(200).send(displaymessages);
+    res.status(200).send({message:displaymessages});
   }
   catch(error){
     res.status(500).send(error)
