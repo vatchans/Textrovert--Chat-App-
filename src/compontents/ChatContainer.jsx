@@ -38,6 +38,7 @@ export default function ChatContainer({ currentChat, socket }) {
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
   const navigate=useNavigate()
+  let[locationdata,setlocationdata]=useState({})
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
   let [msg, setmsg] = useState("")
@@ -99,6 +100,8 @@ export default function ChatContainer({ currentChat, socket }) {
       to: currentChat._id,
     });
     setmessages(res.data.message); 
+    let data2 =(res.data.message[res.data.message.length-1])
+    await localStorage.setItem("location",JSON.stringify(data2))
   }
   useEffect(() => {
   Collectmsgs()
@@ -209,7 +212,7 @@ export default function ChatContainer({ currentChat, socket }) {
         to: currentChat._id,
         location:geolocation_data
       })
-      await localStorage.setItem("location",JSON.stringify(geolocation_data))
+   
       window.location.reload(false)
     })
   }
@@ -218,6 +221,7 @@ export default function ChatContainer({ currentChat, socket }) {
   }
 }
   return <>
+  {/* <Map latitude={latitude} longitude={longitude} style={{display:"none"}}/> */}
     <div className={g || Show}>
       <div className='chat-head'>
         <ArrowBackIcon style={{color:"#EFF1EC"}}
