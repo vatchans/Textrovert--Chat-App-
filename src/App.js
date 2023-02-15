@@ -7,6 +7,7 @@ import Returntologin from './compontents/Returntologin';
 import Signup from './compontents/Signup';
 import Profilepic from './compontents/Profilepic';
 import Chat from './compontents/Chat';
+import Map from './compontents/map';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -22,6 +23,7 @@ function App() {
     <Route path='/return' element={<Returntologin/>}/>
     <Route path='/Profilepic' element={<Profilepic/>}/>
     <Route path='/' element={<Chat/>}/>
+    <Route path="/map" element={<Map/>}/>
       </Routes>
       <ToastContainer/>
   </BrowserRouter>
