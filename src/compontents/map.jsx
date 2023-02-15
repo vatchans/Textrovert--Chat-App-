@@ -4,7 +4,6 @@ import '@tomtom-international/web-sdk-maps/dist/maps.css'
 import tt from '@tomtom-international/web-sdk-maps';
 function Map() {
     const mapElement = useRef();
-    const [mapZoom, setMapZoom] = useState(13);
   
     useEffect(() => {
       let data=JSON.parse(localStorage.getItem('location'))
