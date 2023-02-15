@@ -8,7 +8,6 @@ function Map() {
   
     useEffect(() => {
       let data=JSON.parse(localStorage.getItem('location'))
-      console.log(data)
       let map = tt.map({
         key: 'mURy0iEpFAt3hNZGAdAQrTrGcJTzoqdD',
         container: mapElement.current,
