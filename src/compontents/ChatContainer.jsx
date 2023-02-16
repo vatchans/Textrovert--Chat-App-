@@ -38,14 +38,11 @@ export default function ChatContainer({ currentChat, socket }) {
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
   const navigate=useNavigate()
-  let[locationdata,setlocationdata]=useState({})
-  const [mapZoom, setMapZoom] = useState(13);
-  const [map, setMap] = useState({});
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
   let [Show, hide] = useState("chat-box")
   let [showemoji, hideemoji] = useState(false)
-  const [opendialogbox, setdialogbox] = React.useState(false);
+  const [opendialogbox, setdialogbox] =useState(false);
 
   const handleClickdialogbox = () => {
     setdialogbox(true);
@@ -221,7 +218,6 @@ export default function ChatContainer({ currentChat, socket }) {
   }
 }
   return <>
-  {/* <Map latitude={latitude} longitude={longitude} style={{display:"none"}}/> */}
     <div className={g || Show}>
       <div className='chat-head'>
         <ArrowBackIcon style={{color:"#EFF1EC"}}
@@ -277,7 +273,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
+            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="16rem" height="12.5" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
