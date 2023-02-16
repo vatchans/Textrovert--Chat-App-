@@ -27,8 +27,6 @@ const io = socket(server, {
     socket.on("add-user", (userId) => {
       onlineUsers.set(userId, socket.id);
     });
-    socket.on("typing", (room) => socket.in(room).emit("typing"));
-    socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
     socket.on("send-msg", (data) => {
       const sendUserSocket = onlineUsers.get(data.to);
       if (sendUserSocket) {
