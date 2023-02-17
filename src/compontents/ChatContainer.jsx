@@ -98,7 +98,9 @@ export default function ChatContainer({ currentChat, socket }) {
     });
     setmessages(res.data.message); 
     let data2 =(res.data.message[res.data.message.length-1])
+    if(data2.location){
     await localStorage.setItem("location",JSON.stringify(data2))
+    }
   }
   useEffect(() => {
   Collectmsgs()
