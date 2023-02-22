@@ -23,6 +23,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Map from './map';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { v4 as uuidv4 } from "uuid";
 import { useState, useEffect, useRef } from 'react';
@@ -38,11 +40,14 @@ export default function ChatContainer({ currentChat, socket }) {
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
   const navigate=useNavigate()
+  let[locationdata,setlocationdata]=useState({})
+  const [mapZoom, setMapZoom] = useState(13);
+  const [map, setMap] = useState({});
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
   let [Show, hide] = useState("chat-box")
   let [showemoji, hideemoji] = useState(false)
-  const [opendialogbox, setdialogbox] =useState(false);
+  const [opendialogbox, setdialogbox] = React.useState(false);
 
   const handleClickdialogbox = () => {
     setdialogbox(true);
@@ -97,16 +102,25 @@ export default function ChatContainer({ currentChat, socket }) {
       to: currentChat._id,
     });
     setmessages(res.data.message); 
-    let data2 =(res.data.message[res.data.message.length-1])
-    if(data2.location){
-    await localStorage.setItem("location",JSON.stringify(data2))
-    }
   }
   useEffect(() => {
   Collectmsgs()
 
   }, [currentChat]);
+ 
 
+  let gps=async()=>{
+    let data2 =await Messages.filter((e)=>{return e.location})
+    .map((e)=>{
+      return e.location
+    })
+    if(data2){
+    await localStorage.setItem("location",JSON.stringify(data2[data2.length-1]))
+    }
+  }
+  useEffect(()=>{
+  gps()
+  },[Messages])
   let handleEmoji = (e, emojiObject) => {
     e.preventDefault()
     let message = msg;
@@ -168,9 +182,10 @@ export default function ChatContainer({ currentChat, socket }) {
   function convertToBase64(file){
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
+      fileReader.readAsDataURL(file)
       fileReader.onload = () => {
         resolve(fileReader.result)
+
       };
       fileReader.onerror = (error) => {
         reject(error)
@@ -195,7 +210,7 @@ export default function ChatContainer({ currentChat, socket }) {
     handlesendmsg(base64)
     console.log(base64)
   }
-
+  
 
   const findlocation=async()=>{
   
@@ -220,6 +235,7 @@ export default function ChatContainer({ currentChat, socket }) {
   }
 }
   return <>
+  {/* <Map latitude={latitude} longitude={longitude} style={{display:"none"}}/> */}
     <div className={g || Show}>
       <div className='chat-head'>
         <ArrowBackIcon style={{color:"#EFF1EC"}}
@@ -275,12 +291,13 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="16rem" height="12.5" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
-              <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")?<span>
+            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="290px" height="200px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
+              <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")&&!e.message.includes("data:audio/mpeg;base64")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
             </audio></span>:e.message.includes("data:image")?<img src={e.message}></img>:
-            e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<img src={e.message}></img>:
+            e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<img src={e.message}></img>:e.message.includes('data:audio/mpeg;base64')?<AudioPlayer src={e.message}/>:
+          
               <span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
