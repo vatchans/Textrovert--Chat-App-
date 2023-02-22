@@ -431,6 +431,46 @@ position: relative;
   width:16rem;
   cursor: pointer;
 }
+.rhap_repeat-button {
+  color: #0f6848 !important;
+}
+
+.rhap_controls-section {
+  color: #0f6848 !important;
+}
+
+.rhap_play-pause-button {
+  /* color: #ff5555 !important; */
+  color: #2575fc !important;
+}
+
+.rhap_button-clear.rhap_volume-button svg {
+  color: #79bf11 !important;
+  width: 80% !important;
+}
+.rhap_progress-filled,
+.rhap_progress-indicator {
+  background-color: #eee8e8 !important;
+}
+
+.rhap_time {
+  color: lightgoldenrodyellow !important;
+  font-size: 14px !important;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.rhap_main-controls-button svg {
+  width: 80% !important;
+  height: 100%;
+}
+.rhap_volume-bar-area{
+  display: none!important;
+}
+.rhap_container {
+  background: #09203f !important;
+  border-radius:8px!important;
+  color: white !important;
+}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
