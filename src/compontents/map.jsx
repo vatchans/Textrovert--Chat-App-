@@ -10,11 +10,11 @@ import tt from '@tomtom-international/web-sdk-maps';
       let map = tt.map({
         key: 'mURy0iEpFAt3hNZGAdAQrTrGcJTzoqdD',
         container: mapElement.current,
-        center: [data.location.longitude,data.location.latitude
+        center: [data.longitude,data.latitude
         ],
         zoom: 17,
       });
-      new tt.Marker().setLngLat([data.location.longitude,data.location.latitude]).addTo(map)
+      new tt.Marker().setLngLat([data.longitude,data.latitude]).addTo(map)
       return () => map.remove();
     });
   
