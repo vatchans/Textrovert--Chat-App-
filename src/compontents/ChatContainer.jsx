@@ -297,7 +297,9 @@ export default function ChatContainer({ currentChat, socket }) {
               <source src={e.message} />
             </audio></span>:e.message.includes("data:image")?<img src={e.message}></img>:
             e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<img src={e.message}></img>:e.message.includes('data:audio/mpeg;base64')?<AudioPlayer src={e.message}/>:
-          
+            e.message.includes('data:video/mp4;base64')?<video  controls>
+              <source src={e.message}/>
+            </video>:
               <span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
