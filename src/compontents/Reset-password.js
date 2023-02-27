@@ -11,7 +11,8 @@ function Resetpassword() {
     let navigate=useNavigate()
     const [incoreectpwd,setErrorMessage] = React.useState(false);
     const[showerr,seterr]=useState("")
-    let handlesubmit = async() => {
+    let handlesubmit = async(e) => {
+         e.preventDefault();
         setErrorMessage(false)
     try{
     let res=await axios.post("https://reset-password-oydo.onrender.com/users/reset-password",
@@ -53,7 +54,7 @@ return <> <div className='Container-fluid g ' style={{ 'display': 'flex', 'justi
   {incoreectpwd?<div className="error mt-2">{showerr} <i class="fa-solid fa-circle-exclamation"></i></div>:<></>}
 </Box>
     <Form.Group className="text-center w-35 mb-3 mt-4" controlId="formBasicEmail">
-            <button className='button'  onClick={()=>handlesubmit()}>
+            <button className='button'  onClick={(e)=>handlesubmit(e)}>
                 Send password reset email
             </button>
             </Form.Group>
