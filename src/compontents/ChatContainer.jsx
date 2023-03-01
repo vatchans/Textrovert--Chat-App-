@@ -291,13 +291,13 @@ export default function ChatContainer({ currentChat, socket }) {
 
             <div
               ref={scrollRef} className={e.fromSelf ? "message own" : "message"} key={uuidv4()}
-            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="15rem" margin="0px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
+            >{e.location?<span ><img id="loc_img" src="location.gif"onClick={()=>{navigate("/map")}}></img></span>:e.message.includes("https") && e.message.includes('youtu.be') ? <ReactPlayer width="fit-content" height="fit-content" margin="0px" url={e.message} /> : e.message.startsWith("https")&& !e.message.includes("https://media.tenor.com")?
               <span><a href={e.message} target="_blank" >{e.message}</a></span> : e.message.includes("data:audio/webm")&&!e.message.includes("data:audio/mpeg;base64")?<span>
                 <audio controls style={{width:"14rem"}}>
               <source src={e.message} />
-            </audio></span>:e.message.includes("data:image")?<img src={e.message}></img>:
-            e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<span><img src={e.message}></img></span>:e.message.includes('data:audio/mpeg;base64')?<span><AudioPlayer src={e.message}/></span>:
-            e.message.includes('data:video/mp4;base64')?<span><video  controls width="fit-content">
+            </audio></span>:e.message.includes("data:image")?<img src={e.message} width="fit-content" height="fit-content"></img>:
+            e.message.startsWith("https://media.tenor.com")&&e.message.endsWith(".gif")?<span><img src={e.message} width="fit-content" height="fit-content"></img></span>:e.message.includes('data:audio/mpeg;base64')?<span><AudioPlayer src={e.message}/></span>:
+            e.message.includes('data:video/mp4;base64')?<span><video  controls width="fit-content" height="fit-content">
               <source src={e.message}/>
             </video></span>:
               <span>{e.message}</span>}
