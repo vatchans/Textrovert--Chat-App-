@@ -471,6 +471,9 @@ position: relative;
   border-radius:8px!important;
   color: white !important;
 }
+video{
+  border-radius:8px;
+}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
