@@ -486,6 +486,26 @@ position: relative;
 video{
   border-radius:8px;
 }
+.Searchmsg{
+  display: flex;
+  align-items: center;
+  gap:10px;
+}
+.Searchmsg>input[type=text]{
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  border-bottom:2px solid blue;
+  outline: none;
+  color:white;
+  caret-color:black;
+  width:100%;
+  box-sizing: border-box;
+  background-color:none;
+}
+mark{
+  background-color: yellow!important;
+  border-radius:3px;
+}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
