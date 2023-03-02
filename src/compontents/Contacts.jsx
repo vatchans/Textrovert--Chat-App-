@@ -2,9 +2,12 @@ import React, { useState,useEffect} from 'react'
 import '../App.css'
 import { Avatar } from '@mui/material'
 import { SearchOutlined } from '@mui/icons-material'
+import HomeIcon from '@mui/icons-material/Home';
+import WorkIcon from '@mui/icons-material/Work';
 export default function Contacts({Contacts, changeChat}) {
   let [CurrentuserImage,SetcurrentuserImage]=useState(undefined)
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const[email,Setemail]=useState("gmail.com")
   const [Search,setsearch]=useState('')
   const changeCurrentChat = (i,e) => {
     setCurrentSelected(i);
@@ -48,8 +51,16 @@ let get=localStorage.getItem("res")
           </div>
        
         <div className='Contact-section'>
+          <div className='Contact-info'>
             <h4>Chats</h4>
+            {email=="gmail.com"?<span onClick={()=>{Setemail("guvi.in")}}><HomeIcon/></span>:
+            <span onClick={()=>{Setemail("gmail.com")}}><WorkIcon/></span>}
+            </div>
             {Contacts.filter((s)=>{
+               if(s.Email.includes(email)){
+                return s
+           }
+            }).filter((s)=>{
                  if(Search===""){
                   return s;
                  }
