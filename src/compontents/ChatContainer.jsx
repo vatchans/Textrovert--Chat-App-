@@ -1,9 +1,9 @@
 import React from 'react'
 import '../App.css'
-import { SearchOutlined, MoreVert, AttachFile} from '@mui/icons-material'
+import { SearchOutlined, MoreVert, AttachFile, ConstructionOutlined} from '@mui/icons-material'
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import GifBoxIcon from '@mui/icons-material/GifBox';
-import { Avatar, IconButton, Tooltip } from '@mui/material'
+import { Avatar, fabClasses, IconButton, Tooltip } from '@mui/material'
 import Box from '@mui/material/Box';
 import GifPicker from 'gif-picker-react';
 import Modal from '@mui/material/Modal';
@@ -39,15 +39,14 @@ export default function ChatContainer({ currentChat, socket }) {
   let [Messages, setmessages] = useState([])
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
-  const navigate=useNavigate()
-  let[locationdata,setlocationdata]=useState({})
-  const [mapZoom, setMapZoom] = useState(13);
-  const [map, setMap] = useState({});
+  let navigate=useNavigate()
+  let [searchicon,setsearchicon] = useState(true);
+  let [search,setsearch]=useState('')
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
   let [Show, hide] = useState("chat-box")
   let [showemoji, hideemoji] = useState(false)
-  const [opendialogbox, setdialogbox] = React.useState(false);
+  const [opendialogbox, setdialogbox] = useState(false);
 
   const handleClickdialogbox = () => {
     setdialogbox(true);
@@ -238,7 +237,9 @@ export default function ChatContainer({ currentChat, socket }) {
   {/* <Map latitude={latitude} longitude={longitude} style={{display:"none"}}/> */}
     <div className={g || Show}>
       <div className='chat-head'>
-        <ArrowBackIcon style={{color:"#EFF1EC"}}
+       {searchicon? <>
+      
+     <ArrowBackIcon style={{color:"#EFF1EC"}}
           onClick={() => {
             if (media_screen_width.matches) {
               handlechange()
@@ -265,14 +266,13 @@ export default function ChatContainer({ currentChat, socket }) {
         </div>
         {<div className='Chat-head-right'>
           <Tooltip title="Search messages">
-            <IconButton style={{color:"#EFF1EC"}}>
+            <IconButton style={{color:"#EFF1EC"}} onClick={()=>setsearchicon(false)}>
               <SearchOutlined />
             </IconButton>
           </Tooltip>
           <Tooltip title="Attach File">
           <label htmlFor="file-upload" >
           <AttachFile />
-            {/*  */}
             </label>
           </Tooltip>
           <input type='file'accept='.jpeg,.png,.jpg,.mp3,.mp4' id='file-upload' onChange={(e) => handleFileUpload(e)} />
@@ -281,12 +281,26 @@ export default function ChatContainer({ currentChat, socket }) {
               <MoreVert />
             </IconButton>
           </Tooltip>
+          
         </div>}
+        </>:<div className='Searchmsg'> <ArrowBackIcon  style={{color:"#EFF1EC"}} onClick={()=>setsearchicon(true)}/><input type="text" placeholder='Search...' onChange={(e)=>{setsearch(e.target.value)}}/></div>}
       </div>
+
+
   
 
       <div className='chat-body'>
-        {Messages.map((e) => {
+        {Messages.filter((s)=>{
+           if(search===""){
+            return s;
+           }
+           if(s.location){
+            
+           }
+           else if(s.message.toLowerCase().includes(search.toLowerCase())){
+            return s;
+           }
+        }).map((e) => {
           return (
 
             <div
@@ -300,7 +314,7 @@ export default function ChatContainer({ currentChat, socket }) {
             e.message.includes('data:video/mp4;base64')?<video  controls >
               <source src={e.message}/>
             </video>:
-              <span>{e.message}</span>}
+              e.message.toLowerCase().includes(search.toLowerCase())&&search!==""?<mark>{e.message}</mark>:<span>{e.message}</span>}
               <span style={{ fontSize: "0.5rem" }}>{format(e.time)}</span>
             </div>
             
