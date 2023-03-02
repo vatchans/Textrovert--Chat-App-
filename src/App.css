@@ -238,7 +238,19 @@ min-width:15vw;
   cursor: pointer;
   border-bottom: 1px solid #f6f6f6;
 }
-
+.Contact-info{
+  display: flex;
+  flex-direction:row;
+  justify-content: space-between;
+  padding:10px;
+}
+.Contact-info>h4{
+   margin-top:5px;
+   margin-left:5px;
+}
+.Contact-info>span{
+  cursor: pointer;
+}
 .Contact-section {
   overflow: auto;
 }
