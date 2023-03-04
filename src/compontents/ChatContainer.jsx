@@ -35,7 +35,7 @@ import axios from 'axios';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function ChatContainer({ currentChat, socket }) {
+export default function ChatContainer({ currentChat, socket,online}) {
   let [Messages, setmessages] = useState([])
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
@@ -248,7 +248,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
           }}
         />
-        <Avatar src={currentChat.Profile_pic} onClick={handleOpen} />
+        {online.find((id)=>id.userId===currentChat._id)?<><Avatar src={currentChat.Profile_pic} onClick={handleOpen} /><div className='Online-dot2 m-0'></div></>:<Avatar src={currentChat.Profile_pic} onClick={handleOpen} />}
         <Modal
           open={open}
           onClose={handleClose}
@@ -263,6 +263,7 @@ export default function ChatContainer({ currentChat, socket }) {
         </Modal>
         <div className='chat-head-info' >
           <h3>{currentChat.Username}</h3>
+          <h6 style={{fontSize:"13px"}}>{online.find((id)=>id.userId===currentChat._id)?"Online":"Oflline"}</h6>
         </div>
         {<div className='Chat-head-right'>
           <Tooltip title="Search messages">
