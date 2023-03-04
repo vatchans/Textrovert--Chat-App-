@@ -4,7 +4,7 @@ import { Avatar } from '@mui/material'
 import { SearchOutlined } from '@mui/icons-material'
 import HomeIcon from '@mui/icons-material/Home';
 import WorkIcon from '@mui/icons-material/Work';
-export default function Contacts({Contacts, changeChat}) {
+export default function Contacts({Contacts, changeChat,online}) {
   let [CurrentuserImage,SetcurrentuserImage]=useState(undefined)
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const[email,Setemail]=useState("gmail.com")
@@ -70,7 +70,7 @@ let get=localStorage.getItem("res")
             }).map((e,i)=>{
               return(
            <div className='Contact-list' key={e._id} >
-            <Avatar src={e.Profile_pic}></Avatar>
+          {online.find((id)=>id.userId===e._id)?<><Avatar src={e.Profile_pic}/><div className='Online-dot m-0'></div></>:<Avatar src={e.Profile_pic}/>}
             <div className='User-info' onClick={()=>{
               if(media_screen_width.matches){
                  handlechange(i,e)
@@ -80,6 +80,7 @@ let get=localStorage.getItem("res")
               }
           }}>
             <h2>{e.Username}</h2>
+            <h6>{online.find((id)=>id.userId===e._id)?<span style={{color:"green"}}>Online</span>:"Offline"}</h6>
             </div>
            </div>
               )
