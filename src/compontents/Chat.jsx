@@ -59,7 +59,7 @@ export default function Chat() {
       }
     }
   }
-
+ console.log(Onlineuser)
   useEffect(() => {
     getdata()
   }, [currentuser]);
