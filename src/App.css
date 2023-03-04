@@ -506,6 +506,28 @@ mark{
   background-color: yellow!important;
   border-radius:3px;
 }
+.Online-dot{
+  border:5px solid #4CBB17;
+  position: relative;
+  top:27px;
+  left:-9px;
+  padding:0px;
+  margin:0px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+
+}
+.Online-dot2{
+  border:5px solid #4CBB17;
+  position: relative;
+  top:15px;
+  left:-9px;
+  padding:0px;
+  margin:0px;
+  width:9px;
+  height:9px;
+  border-radius:50%;}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
