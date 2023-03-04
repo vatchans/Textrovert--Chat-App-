@@ -12,6 +12,7 @@ export default function Chat() {
   const socket = useRef();
   let [loading, isloading] = useState(false)
   let [currentuser, setcurrentuser] = useState(undefined)
+  let [Onlineuser,setonline]=useState([])
   const [currentChat, setCurrentChat] = useState(undefined);
   let navigate = useNavigate()
   let isExistinguser = async () => {
@@ -30,11 +31,15 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
-    if (currentuser) {
+       let data= JSON.parse(
+      localStorage.getItem('Online-user')
+    )
       socket.current = io('https://textrovert.onrender.com');
-      socket.current.emit("add-user", currentuser._id);
-    }
-  }, [currentuser]);
+      socket.current.emit("add-user",data._id);
+      socket.current.on("get-users", (users) => {
+        setonline(users)
+      });
+  }, []);
 
   useEffect(() => {
     isloading(true)
@@ -100,9 +105,9 @@ export default function Chat() {
         </div> :
         <div className='main'>
           <div className="containes">
-            <Contacts Contacts={Contact} changeChat={handleChatChange} />
+            <Contacts Contacts={Contact} changeChat={handleChatChange} online={Onlineuser}/>
             {currentChat === undefined ? <Welcome name={name} /> :
-              <ChatContainer currentChat={currentChat} socket={socket} />}
+              <ChatContainer currentChat={currentChat} socket={socket} online={Onlineuser}/>}
           </div>
         </div>
     }
