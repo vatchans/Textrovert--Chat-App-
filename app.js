@@ -19,14 +19,23 @@ const io = socket(server, {
     },
   });
   
- 
+  let online=[]
   global.onlineUsers = new Map();
   io.on("connection", (socket) => {
     global.chatSocket = socket;
-     
     socket.on("add-user", (userId) => {
       onlineUsers.set(userId, socket.id);
+       if (!online.some((user) => user.userId ===userId)) {
+        online.push({ userId: userId, socketId: socket.id });
+        
+      }
+      io.emit("get-users",online)
     });
+      socket.on('disconnect',()=>{
+      online=online.filter((user)=>user.socketId!==socket.id)
+      io.emit("get-users",online)
+
+    })
     socket.on("send-msg", (data) => {
       const sendUserSocket = onlineUsers.get(data.to);
       if (sendUserSocket) {
