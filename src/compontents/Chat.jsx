@@ -34,7 +34,7 @@ export default function Chat() {
        let data= JSON.parse(
       localStorage.getItem('Online-user')
     )
-     let og= socket.current = io('https://textrovert.onrender.com:10000');
+     let og= socket.current = io('http://localhost:8000/');
     console.log(og)
       socket.current.emit("add-user",data._id);
       socket.current.on("get-users", (users) => {
