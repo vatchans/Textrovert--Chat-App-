@@ -34,8 +34,7 @@ export default function Chat() {
        let data= JSON.parse(
       localStorage.getItem('Online-user')
     )
-     let og= socket.current = io('https://textrovert.onrender.com');
-    console.log(og)
+      socket.current = io('https://textrovert.onrender.com');
       socket.current.emit("add-user",data._id);
       socket.current.on("get-users", (users) => {
         setonline(users)
@@ -53,13 +52,11 @@ export default function Chat() {
       if (currentuser.isProfile_pic) {
         const res = await axios.get(`https://textrovert.onrender.com/users/Alluser/${currentuser._id}`);
         SetContacts(res.data);
-        console.log(res.data)
       } else {
         navigate("/Profilepic");
       }
     }
   }
- console.log(Onlineuser)
   useEffect(() => {
     getdata()
   }, [currentuser]);
