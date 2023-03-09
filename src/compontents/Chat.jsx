@@ -38,7 +38,7 @@ export default function Chat() {
     let data= JSON.parse(
       localStorage.getItem('Online-user')
     )
-      socket.current = io('http://localhost:8000');
+      socket.current = io('https://textrovert.onrender.com');
       socket.current.emit("add-user",data._id);
       socket.current.on("get-users", (users) => {
         setonline(users)
@@ -48,7 +48,7 @@ export default function Chat() {
           return e;
         }}).map(async(e)=>{
           
-        await axios.post("http://localhost:8000/users/offline",{
+        await axios.post("https://textrovert.onrender.com/users/offline",{
           userID:e.userId,
         })
       
@@ -66,7 +66,7 @@ let removeOffline=async()=>{
 }
 let offline_users=async()=>{
   if(currentuser._id){
-    let res=await axios.get('http://localhost:8000/users/offline_users')
+    let res=await axios.get('https://textrovert.onrender.com/users/offline_users')
     setlastseen(res.data)
   }
 }
