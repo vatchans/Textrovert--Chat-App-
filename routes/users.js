@@ -204,4 +204,82 @@ router.post("/new-password/:Email/", async (req, res) => {
     res.status(500).send('err')
   }
 })
+router.post("/offline",async(req,res)=>{
+  try{
+    let user=await Onlinestatus.insertMany(req.body)
+    res.status(201).send("Offline users data posted")
+  }
+  catch(error){
+    res.status(500).send(error)
+  }
+})
+router.delete('/online/:id',async(req,res)=>{
+  try{
+      let user=await Onlinestatus.deleteMany({userID:req.params.id})
+      res.status(200).send("Offilne data removed")
+  }
+  catch(error){
+    res.status(500).send(error)
+  }
+})
+router.get("/offline_users",async(req,res)=>{
+  try{
+    let user=await Onlinestatus.find()
+    let data=user.map((e)=>{
+      let format=e.lastseen
+      let timestamp=format.toString();
+      let timezone=timestamp.split(" ").slice(0,4)
+      let result=timestamp.split(" ").splice(0,0)
+      let d=new Date(format)
+      let Today=new Date().getDate()
+      let D=d.getDate()
+      let H=d.getHours();
+      let M=d.getMinutes();
+      let current_status=''
+      let time_format=''
+      if(Today===D){
+          current_status='today at'
+          result.push(current_status)
+      if(H>=13){
+       H=H-12
+       time_format=`${H}:${M} PM`
+       result.push(time_format)
+      }else{
+        time_format=`${H}:${M} AM`
+        result.push(time_format)
+      }}if(Today-1===D){
+         current_status='Yesterday at'
+         result.push(current_status)
+         if(H>=13){
+          H=H-12
+          time_format=`${H}:${M} PM`
+          result.push(time_format)
+         }else{
+           time_format=`${H}:${M} AM`
+           result.push(time_format)
+         }}
+         if(Today!==D&&Today-1!==D){
+          current_status=`${timezone.join(" ")} at`
+          result.push(current_status)
+          if(H>=13){
+            H=H-12
+            time_format=`${H}:${M} PM`
+            result.push(time_format)
+           }else{
+             time_format=`${H}:${M} AM`
+             result.push(time_format)
+           }
+         }
+      return{
+        userID:e.userID,
+        lastseen:result.join(" "),
+      }
+    })
+    res.status(200).send(data)
+    
+  }
+  catch(error){
+    res.status(500).send(error)
+  }
+})
 module.exports = router;
