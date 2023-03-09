@@ -60,7 +60,7 @@ export default function Chat() {
 
 let removeOffline=async()=>{
   if(currentuser._id){
-  let res=await axios.delete(`http://localhost:8000/users/online/${currentuser._id}`
+  let res=await axios.delete(`https://textrovert.onrender.com/users/online/${currentuser._id}`
   )
   }
 }
