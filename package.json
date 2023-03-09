@@ -17,6 +17,7 @@
     "emoji-picker-react": "^3.5.1",
     "gif-picker-react": "^1.1.0",
     "image-to-base64": "^2.2.0",
+    "lottie-react": "^2.4.0",
     "react": "^18.2.0",
     "react-audio-voice-recorder": "^1.0.4",
     "react-bootstrap": "^2.7.2",
