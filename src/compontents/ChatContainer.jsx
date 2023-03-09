@@ -31,11 +31,13 @@ import { useState, useEffect, useRef } from 'react';
 import { format } from 'timeago.js'
 import ReactPlayer from 'react-player';
 import { Link,useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import typing_animation from './6652-dote-typing-animation.json'
 import axios from 'axios';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function ChatContainer({ currentChat, socket,online}) {
+export default function ChatContainer({ currentChat, socket,online,lastseen}) {
   let [Messages, setmessages] = useState([])
   let [showgifbox,hidegifbox]=useState(false)
   let [arrivalMessage, setArrivalMessage] = useState(null);
@@ -44,6 +46,7 @@ export default function ChatContainer({ currentChat, socket,online}) {
   let [search,setsearch]=useState('')
   let [msg, setmsg] = useState("")
   let scrollRef = useRef();
+  let [typing,setTyping]=useState(false)
   let [Show, hide] = useState("chat-box")
   let [showemoji, hideemoji] = useState(false)
   const [opendialogbox, setdialogbox] = useState(false);
@@ -202,7 +205,9 @@ export default function ChatContainer({ currentChat, socket,online}) {
    await handlesendmsg(gif.url)
   }
 
-  useEffect(resizeTextArea, [msg]);
+  useEffect(resizeTextArea, 
+    [msg]);
+  
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
@@ -233,8 +238,50 @@ export default function ChatContainer({ currentChat, socket,online}) {
         console.log(error)
   }
 }
+
+let time=lastseen.filter((e)=>{
+  if(e.userID==currentChat._id){
+    return e;
+  }
+}).map((e)=>{
+  return e.lastseen
+})
+let r=time.toString()
+
+let typing_indicator=async()=>{
+  const data = await JSON.parse(
+    localStorage.getItem('Online-user')
+  );
+  if(online.find((id)=>id.userId===currentChat._id)){
+  if(msg.length>0){
+    socket.current.emit('typing',{userID:data._id,typing:true})
+  }
+  else{
+    socket.current.emit('typing',{userID:data._id,typing:false})
+  }
+}
+}
+
+let typing_status=()=>{
+  socket.current.on('typing_indication',(data)=>{
+    if(data.userID===currentChat._id){
+      if(data.typing===true){
+        setTyping(true)
+      }
+    else{
+      setTyping(false)
+    }
+    }
+  })
+}
+useEffect(()=>{
+ typing_indicator()
+ typing_status()
+},[msg,setmsg])
+
+
+console.log(typing)
   return <>
-  {/* <Map latitude={latitude} longitude={longitude} style={{display:"none"}}/> */}
     <div className={g || Show}>
       <div className='chat-head'>
        {searchicon? <>
@@ -263,7 +310,7 @@ export default function ChatContainer({ currentChat, socket,online}) {
         </Modal>
         <div className='chat-head-info' >
           <h3>{currentChat.Username}</h3>
-          <h6 style={{fontSize:"13px"}}>{online.find((id)=>id.userId===currentChat._id)?"Online":"Oflline"}</h6>
+          <h6 style={{fontSize:"13px"}}>{online.find((id)=>id.userId===currentChat._id)?"Online":lastseen.find((id)=>id.userID===currentChat._id)?`Last seen ${r}`:"Offline"}</h6>
         </div>
         {<div className='Chat-head-right'>
           <Tooltip title="Search messages">
@@ -344,8 +391,11 @@ export default function ChatContainer({ currentChat, socket,online}) {
         </Dialog>
         </div>
   
-           {/* <div ref={mapElement} className="mapDiv" /> */}
+        
+           
         <div className='emoji'>
+        <div className='typing'>{typing?<>
+        <Lottie animationData={typing_animation} loop={true} margin={0} padding={0} style={{padding:"0px", margin:"0px", marginLeft: '-50%',marginTop:'-100%',marginBottom:'-100%',}}/></>:<></>}</div>
          {showemoji && <Picker onEmojiClick={(e, emojiObject) => handleEmoji(e, emojiObject)} />}
         </div>
         <div className='gif'>
@@ -357,7 +407,7 @@ export default function ChatContainer({ currentChat, socket,online}) {
         <LocationOnIcon onClick={handleClickdialogbox}/>
       <GifBoxIcon onClick={handlegifpicker}/>
         <EmojiEmotionsIcon onClick={handlemojipicker} />&nbsp;
-        <TextArea ref={textAreaRef} placeholder="Message..." value={msg} type='text' onChange={(e) => { setmsg(e.target.value) }} row="1"  />&nbsp;
+        <TextArea ref={textAreaRef} placeholder="Message..." value={msg} type='text' onChange={(e) => {setmsg(e.target.value)}} row="1"  />&nbsp;
        {msg.length>0?<>
         <div className='sendbtn' type="submit" onClick={(e) => sendchat(e)}
         ><SendIcon /></div>
