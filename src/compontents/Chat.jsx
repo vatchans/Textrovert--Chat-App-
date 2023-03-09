@@ -11,8 +11,9 @@ export default function Chat() {
   let [Contact, SetContacts] = useState([])
   const socket = useRef();
   let [loading, isloading] = useState(false)
-  let [currentuser, setcurrentuser] = useState(undefined)
   let [Onlineuser,setonline]=useState([])
+  let [lastseen,setlastseen]=useState([])
+  let [currentuser, setcurrentuser] = useState('')
   const [currentChat, setCurrentChat] = useState(undefined);
   let navigate = useNavigate()
   let isExistinguser = async () => {
@@ -23,30 +24,59 @@ export default function Chat() {
         await JSON.parse(
           localStorage.getItem('Online-user')
         )
-      );
+      )
+     
+     
     }
+    
   }
-  useEffect(() => {
+  useEffect(async() => {
     isExistinguser()
   }, []);
-
-  useEffect(() => {
-       let data= JSON.parse(
+ 
+  useEffect(async() => {
+    let data= JSON.parse(
       localStorage.getItem('Online-user')
     )
-      socket.current = io('https://textrovert.onrender.com');
+      socket.current = io('http://localhost:8000');
       socket.current.emit("add-user",data._id);
       socket.current.on("get-users", (users) => {
         setonline(users)
       });
-  }, []);
+      socket.current.on("lastseen",(users)=>{
+        users.filter((e)=>{if(e.userId!==""&&!e.userId.includes(data._id)){
+          return e;
+        }}).map(async(e)=>{
+          
+        await axios.post("http://localhost:8000/users/offline",{
+          userID:e.userId,
+        })
+      
+      })})
+    
+   
 
+  },[]);
+
+let removeOffline=async()=>{
+  if(currentuser._id){
+  let res=await axios.delete(`http://localhost:8000/users/online/${currentuser._id}`
+  )
+  }
+}
+let offline_users=async()=>{
+  if(currentuser._id){
+    let res=await axios.get('http://localhost:8000/users/offline_users')
+    setlastseen(res.data)
+  }
+}
   useEffect(() => {
     isloading(true)
     setTimeout(() => {
       isloading(false)
     }, 400)
   }, [])
+  
   let getdata = async () => {
     if (currentuser) {
       if (currentuser.isProfile_pic) {
@@ -57,6 +87,7 @@ export default function Chat() {
       }
     }
   }
+
   useEffect(() => {
     getdata()
   }, [currentuser]);
@@ -86,6 +117,15 @@ export default function Chat() {
   useEffect(() => {
     resize()
   }, [])
+
+  useEffect(()=>{
+  removeOffline()
+  },[currentuser])
+
+  useEffect(()=>{
+  offline_users()
+  },[Onlineuser,setonline])
+
   let name = JSON.parse(localStorage.getItem("Online-user"))
   return <>
     {
@@ -103,9 +143,9 @@ export default function Chat() {
         </div> :
         <div className='main'>
           <div className="containes">
-            <Contacts Contacts={Contact} changeChat={handleChatChange} online={Onlineuser}/>
+            <Contacts Contacts={Contact} changeChat={handleChatChange} online={Onlineuser} />
             {currentChat === undefined ? <Welcome name={name} /> :
-              <ChatContainer currentChat={currentChat} socket={socket} online={Onlineuser}/>}
+              <ChatContainer currentChat={currentChat} socket={socket} online={Onlineuser} lastseen={lastseen}/>}
           </div>
         </div>
     }
