@@ -20,6 +20,7 @@ const io = socket(server, {
   });
   
   let online=[]
+  global.lastseen=[]
   global.onlineUsers = new Map();
   io.on("connection", (socket) => {
     global.chatSocket = socket;
