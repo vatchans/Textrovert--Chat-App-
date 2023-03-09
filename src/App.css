@@ -527,7 +527,17 @@ mark{
   margin:0px;
   width:9px;
   height:9px;
-  border-radius:50%;}
+  border-radius:50%;
+}
+
+.typing{
+  position: absolute!important;
+  top:100%;
+  margin-top:7rem;
+  padding-top:5%;
+  width:6rem;
+  height:4rem;
+}
 @media only screen and (max-width:720px) {
   .signin {
     width: 350px;
