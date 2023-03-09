@@ -4,6 +4,7 @@ var router = express.Router();
 const {dburl } =require('../dbconfig/DB')
 const {userModel}=require('../dbconfig/Schema/UserSchema')
 const{ Messagemodel}=require('../dbconfig/Schema/MessageSchema')
+const {Onlinestatus}=require('../dbconfig/Schema/LastseenSchema')
 const {generateEmail } = require('../dbconfig/utils/Email');
 const { hashPassword, validate, Createtoken, Decodetoken, Tokenvalidate }=require('../dbconfig/Schema/brycrt')
 const shortid=require('shortid')
