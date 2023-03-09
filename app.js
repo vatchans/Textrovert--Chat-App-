@@ -31,11 +31,30 @@ const io = socket(server, {
       }
       io.emit("get-users",online)
     });
-      socket.on('disconnect',()=>{
+    
+     socket.on('disconnect',()=>{
+      let find_user=online.filter((user)=>user.socketId==socket.id)
+      let r=[...new Set(find_user)]
+      let user = r.map((e)=>{if(e.userId!==""){return e.userId}}
+      ).join("")
+      if(!lastseen.some((e) =>e.userId ===user)){   
+         lastseen.push({userId:user})
+       }
       online=online.filter((user)=>user.socketId!==socket.id)
       io.emit("get-users",online)
-
+      io.emit("lastseen",lastseen)
     })
+    
+       socket.on("typing", (user) =>{
+      if(user.typing==true){
+        io.emit("typing_indication",user)
+      }
+      else{
+        io.emit("typing_indication",user)
+      }
+    })
+   
+    
     socket.on("send-msg", (data) => {
       const sendUserSocket = onlineUsers.get(data.to);
       if (sendUserSocket) {
