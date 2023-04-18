@@ -1,70 +1,15 @@
-# Getting Started with Create React App
+Textrovert is a real-time chat application that allows users to communicate in a variety of ways. Users can chat with each other using text-based messages, as well as send voice messages to each other.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In addition, Textrovert includes a range of fun and expressive features. Users can send stickers and GIFs to each other.
 
-## Available Scripts
+Users can also share a variety of multimedia content, such as images, documents, videos, audios files and their current location. This feature can be especially helpful for coordinating plans or sharing important information with friends, family, or colleagues.
 
-In the project directory, you can run:
+Textrovert also includes some helpful organizational features. Users can check the online/offline status of others, which can be useful for knowing when someone is available to chat. Additionally, users can search previous messages in their conversation history, which can be a helpful tool for finding specific information or referencing past conversations.
 
-### `npm start`
+When a user shares a YouTube link, other users can view the video directly within the chat window, without being redirected to the YouTube website.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This feature can be incredibly useful for a number of reasons. Firstly, it can help to keep users engaged in the conversation. Rather than being redirected to a different website, users can continue to chat while watching the video within the chat window. This can help to keep the conversation flowing and prevent distractions.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Finally, Textrovert includes a typing indication feature that lets users know when someone is currently typing a message to them. This can be a helpful way to stay engaged in a conversation and know when to expect a response.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Overall, Textrovert is a feature-rich chat application that offers a wide range of communication options, multimedia sharing features, and organizational tools. Whether you're chatting with friends, family, or colleagues, Textrovert can help you stay connected and engaged in your conversations.
